@@ -193,3 +193,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle,java
+/src/main/resources/application-local.properties
+/src/main/resources/.env
