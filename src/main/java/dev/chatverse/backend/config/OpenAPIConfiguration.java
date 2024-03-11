@@ -14,7 +14,7 @@ public class OpenAPIConfiguration {
     public OpenAPI defineOpenApi() {
         Server server = new Server();
         server.setUrl("http://localhost:8080");
-        server.setDescription("CharVerse Docs");
+        server.setDescription("ChatVerse Docs");
 
         Contact myContact = new Contact();
         myContact.setName("University of Zielona Góra");
@@ -22,7 +22,7 @@ public class OpenAPIConfiguration {
 
         Info information = new Info()
                 .title("ChatVerse API")
-                .version("0.1.0")
+                .version("0.0.0")
                 .description("This API exposes endpoints to manage Users")
                 .contact(myContact);
 
