@@ -31,19 +31,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processOAuth2User(OAuth2User oauthUser) {
         String email = oauthUser.getAttribute("email");
         User user = userRepository.findByEmail(email);
-
+        System.out.printf("User:"+oauthUser.getAttributes());
         if (user == null) {
             user = new User();
             user.setEmail(email);
             user.setName(oauthUser.getAttribute("name"));
             // Set default role for new users
             user.setRoles(new HashSet<>(Set.of(Role.USER)));
+            user.setPictureUrl(oauthUser.getAttribute("picture"));
             userRepository.save(user);
+
         }
+
 
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
         return new DefaultOAuth2User(authorities, oauthUser.getAttributes(), "id");
     }
+
 }

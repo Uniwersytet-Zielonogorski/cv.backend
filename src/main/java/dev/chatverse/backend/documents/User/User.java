@@ -15,5 +15,6 @@ public class User {
     private String id;
     private String name;
     private String email;
+    private String pictureUrl;
     private Set<Role> roles = new HashSet<>();
 }
