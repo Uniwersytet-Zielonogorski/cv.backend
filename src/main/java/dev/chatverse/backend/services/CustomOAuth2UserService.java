@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,14 +32,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2User oauthUser) {
         String email = oauthUser.getAttribute("email");
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("User not found with email: " + email)
+        );
 
         if (user == null) {
             user = new User();
             user.setEmail(email);
-            user.setName(oauthUser.getAttribute("name"));
+            user.setUserName(oauthUser.getAttribute("name"));
             // Set default role for new users
             user.setRoles(new HashSet<>(Set.of(Role.USER)));
+            user.setGivenName(oauthUser.getAttribute("given_name"));
+            user.setFamilyName(oauthUser.getAttribute("family_name"));
+            try {
+                user.setPicture(new URL(oauthUser.getAttribute("picture")));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            user.setLocale(oauthUser.getAttribute("locale"));
             userRepository.save(user);
         }
 
