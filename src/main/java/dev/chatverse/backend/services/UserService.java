@@ -18,10 +18,8 @@ public class UserService {
         );
     }
 
-    public User loadUserById(String id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with id: " + id)
-        );
+    public UserResponse getUserResponse(String id) {
+        User user = loadUserByEmail(id);
+        return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture());
     }
-
 }

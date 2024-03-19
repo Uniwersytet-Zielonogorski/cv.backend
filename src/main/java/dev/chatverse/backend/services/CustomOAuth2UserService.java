@@ -12,9 +12,8 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,30 +31,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2User oauthUser) {
         String email = oauthUser.getAttribute("email");
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("User not found with email: " + email)
-        );
+        User user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
             user = new User();
+            assert email != null;
             user.setEmail(email);
-            user.setUserName(oauthUser.getAttribute("name"));
-            // Set default role for new users
+            user.setUserName(Objects.requireNonNull(oauthUser.getAttribute("name")));
             user.setRoles(new HashSet<>(Set.of(Role.USER)));
-            user.setGivenName(oauthUser.getAttribute("given_name"));
-            user.setFamilyName(oauthUser.getAttribute("family_name"));
-            try {
-                user.setPicture(new URL(oauthUser.getAttribute("picture")));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            user.setGivenName(Objects.requireNonNull(oauthUser.getAttribute("given_name")));
+            user.setFamilyName(Objects.requireNonNull(oauthUser.getAttribute("family_name")));
+            user.setPicture(oauthUser.getAttribute("picture"));
             user.setLocale(oauthUser.getAttribute("locale"));
             userRepository.save(user);
         }
 
+        System.out.println(oauthUser.getAttributes());
+
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
-        return new DefaultOAuth2User(authorities, oauthUser.getAttributes(), "id");
+        return new DefaultOAuth2User(authorities, oauthUser.getAttributes(), "email");
     }
 }
