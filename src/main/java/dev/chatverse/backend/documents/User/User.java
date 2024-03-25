@@ -29,6 +29,7 @@ public class User {
 
     private String picture;
 
+
     private String locale;
 
     @Nonnull
@@ -40,4 +41,8 @@ public class User {
 
     @Nonnull
     private Set<Role> roles = new HashSet<>();
+
+    private String ToxicMessages;
+
+
 }

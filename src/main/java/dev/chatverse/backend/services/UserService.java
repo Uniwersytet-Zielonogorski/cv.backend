@@ -20,6 +20,6 @@ public class UserService {
 
     public UserResponse getUserResponse(String id) {
         User user = loadUserByEmail(id);
-        return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture());
+        return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getToxicMessages());
     }
 }

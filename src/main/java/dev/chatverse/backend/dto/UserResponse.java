@@ -10,4 +10,7 @@ public class UserResponse {
     private final String email;
     private final String username;
     private final String pictureUrl;
+    private final String ToxicMessages;
 }
+
+
