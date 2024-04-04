@@ -22,6 +22,7 @@ public class UserService {
 
     public User loadUserByEmail(String email) {
         log.debug("Loading user by email: {}", email);
+      
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with email: " + email)
         );

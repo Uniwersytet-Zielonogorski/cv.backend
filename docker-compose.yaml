@@ -8,8 +8,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASS}
-    ports:
-        - "27017:27017"
     volumes:
       - mongo-data:/data/db
     networks:
@@ -29,22 +27,22 @@ services:
     networks:
       - backend-network
 
-#  cv-backend:
-#    image: cv-backend
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    restart: always
-#    depends_on:
-#      - mongo
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      MONGODB_URI: mongodb://${MONGODB_USER}:${MONGODB_PASS}@mongo:27017/${MONGODB_DB}?authSource=admin
-#      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-#      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-#    networks:
-#      - backend-network
+  cv-backend:
+    image: cv-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_URI: mongodb://${MONGODB_USER}:${MONGODB_PASS}@mongo:27017/${MONGODB_DB}?authSource=admin
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    networks:
+      - backend-network
 
 networks:
   backend-network:

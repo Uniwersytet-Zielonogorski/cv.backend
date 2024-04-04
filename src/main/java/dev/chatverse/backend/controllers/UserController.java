@@ -93,5 +93,4 @@ public class UserController {
     public UserResponse unbanUser(@PathVariable String email) {
         return userService.unbanUser(email);
     }
-
 }
