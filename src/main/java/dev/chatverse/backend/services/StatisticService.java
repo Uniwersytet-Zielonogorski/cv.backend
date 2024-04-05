@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,6 @@ public class StatisticService {
         );
     }
 
-
     public StatisticResponse getStatisticResponse(String email) {
         User user = loadUserByEmail(email);
         return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
@@ -32,4 +32,11 @@ public class StatisticService {
                 .collect(Collectors.toSet());
     }
 
+    public List<StatisticResponse> getLeaderboard() {
+        return userRepository.findAll().stream()
+                .map(user -> new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage()))
+                .sorted((o1, o2) -> (int) (o2.getToxicPercentage() - o1.getToxicPercentage()))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 }

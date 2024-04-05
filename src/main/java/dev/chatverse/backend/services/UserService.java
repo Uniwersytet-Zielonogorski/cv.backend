@@ -86,6 +86,7 @@ public class UserService {
         userRepository.save(user);
         return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
     }
+
     public StatisticResponse getStatisticResponse(String email) {
         User user = loadUserByEmail(email);
         return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
