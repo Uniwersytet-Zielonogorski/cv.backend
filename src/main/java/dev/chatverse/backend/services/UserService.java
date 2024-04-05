@@ -29,6 +29,12 @@ public class UserService {
         );
     }
 
+    public User loadUserByGivenAndFamilyName(String givenName, String familyName) {
+        return userRepository.findByGivenNameAndFamilyName(givenName, familyName).orElseThrow(
+                () -> new UsernameNotFoundException("User " + givenName + " " + familyName + " not found.")
+        );
+    }
+
     public Set<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles()))
@@ -80,17 +86,6 @@ public class UserService {
         userRepository.save(user);
         return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
     }
-    public User loadUserByGivenAndFamilyName(String givenName, String familyName) {
-        return userRepository.findByGivenNameAndFamilyName(givenName, familyName).orElseThrow(
-                () -> new UsernameNotFoundException("User " + givenName + " " + familyName + " not found.")
-        );
-    }
-
-    public UserResponse getUserResponse(String email) {
-        User user = loadUserByEmail(email);
-        return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture());
-    }
-
     public StatisticResponse getStatisticResponse(String email) {
         User user = loadUserByEmail(email);
         return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
