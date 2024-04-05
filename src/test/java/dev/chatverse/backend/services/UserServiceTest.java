@@ -32,7 +32,19 @@ public class UserServiceTest {
 
     @Test
     void testLoadUserByEmailSuccess() {
-        User user = new User("1", "John", "Doe", "test@example.com", "john.doe", "http://example.com/picture", "test@example.com", new HashSet<>(),"2");
+        User user = User.builder()
+                .givenName("John")
+                .familyName("Doe")
+                .email("test@example.com")
+                .locale("en-US")
+                .picture("http://example.com/picture")
+                .roles(new HashSet<>())
+                .userName("john.doe")
+
+                        .build();
+
+
+
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         User result = userService.loadUserByEmail("test@example.com");
@@ -55,7 +67,15 @@ public class UserServiceTest {
 
     @Test
     void testGetUserResponse() {
-        User user = new User("1", "John", "Doe", "http://example.com/picture", "en-US", "john.doe", "test@example.com", new HashSet<>(), "2");
+        User user = User.builder()
+                .givenName("John")
+                .familyName("Doe")
+                .email("test@example.com")
+                .locale("en-US")
+                .picture("http://example.com/picture")
+                .roles(new HashSet<>())
+                .userName("john.doe")
+                .build();
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         UserResponse userResponse = userService.getUserResponse("test@example.com");
@@ -65,7 +85,5 @@ public class UserServiceTest {
         assertEquals("test@example.com", userResponse.getEmail());
         assertEquals("john.doe", userResponse.getUsername());
         assertEquals("http://example.com/picture", userResponse.getPictureUrl());
-        assertEquals(new HashSet<>(), userResponse.getToxicMessages());
-
     }
 }

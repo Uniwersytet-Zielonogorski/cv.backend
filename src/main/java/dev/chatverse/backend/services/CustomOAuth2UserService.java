@@ -48,7 +48,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setFamilyName(Objects.requireNonNull(oauthUser.getAttribute("family_name")));
             user.setPicture(oauthUser.getAttribute("picture"));
             user.setLocale(oauthUser.getAttribute("locale"));
-            user.setToxicMessages(oauthUser.getAttribute("ToxicMessages"));
             log.debug("Saving user: {}", user);
             userRepository.save(user);
         }
