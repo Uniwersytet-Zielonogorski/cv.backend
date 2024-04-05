@@ -55,6 +55,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_BANNED"))) {
+            throw new OAuth2AuthenticationException("User is banned");
+        }
+
         return new DefaultOAuth2User(authorities, oauthUser.getAttributes(), "email");
     }
 }
