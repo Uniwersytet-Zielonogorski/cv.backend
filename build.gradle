@@ -32,10 +32,9 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
-    testImplementation'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {

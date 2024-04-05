@@ -3,8 +3,8 @@ package dev.chatverse.backend.services;
 import dev.chatverse.backend.documents.User.Role;
 import dev.chatverse.backend.documents.User.User;
 import dev.chatverse.backend.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -55,6 +55,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Set<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
+
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_BANNED"))) {
+            throw new OAuth2AuthenticationException("User is banned");
+        }
+
         return new DefaultOAuth2User(authorities, oauthUser.getAttributes(), "email");
     }
 }

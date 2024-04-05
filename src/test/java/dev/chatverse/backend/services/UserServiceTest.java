@@ -83,7 +83,7 @@ public class UserServiceTest {
         assertNotNull(userResponse);
         assertEquals("1", userResponse.getId());
         assertEquals("test@example.com", userResponse.getEmail());
-        assertEquals("john.doe", userResponse.getUsername());
+        assertEquals("john.doe", userResponse.getUserName());
         assertEquals("http://example.com/picture", userResponse.getPictureUrl());
     }
 }

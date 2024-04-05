@@ -2,6 +2,7 @@ package dev.chatverse.backend.documents.User;
 
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Email;
+import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,17 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
+    public User(User user) {
+        this.id = user.getId();
+        this.givenName = user.getGivenName();
+        this.familyName = user.getFamilyName();
+        this.picture = user.getPicture();
+        this.locale = user.getLocale();
+        this.userName = user.getUserName();
+        this.email = user.getEmail();
+        this.roles = user.getRoles();
+    }
 
     @Id
     @Nonnull
