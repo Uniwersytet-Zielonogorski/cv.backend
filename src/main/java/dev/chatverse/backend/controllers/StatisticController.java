@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
-@RequestMapping("/statistic")
+@RequestMapping("/statistics")
 @AllArgsConstructor
 @RestController
 public class StatisticController {
@@ -24,16 +24,14 @@ public class StatisticController {
 
     @GetMapping("/me")
     public StatisticResponse statistic(Principal principal) {
-
         String currentPrincipalName = principal.getName();
-
         return userService.getStatisticResponse(currentPrincipalName);
     }
 
     @GetMapping("/all")
     @RolesAllowed("ADMIN")
     public Set<StatisticResponse> getAllUsers() {
-        return StatisticService.getAllUsersStatistic();
+        return StatisticService.getAllUsersStatistics();
     }
 
     @GetMapping("/leaderboard")

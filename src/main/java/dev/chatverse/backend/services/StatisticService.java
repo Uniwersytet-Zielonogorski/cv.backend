@@ -26,7 +26,7 @@ public class StatisticService {
         return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
     }
 
-    public Set<StatisticResponse> getAllUsersStatistic() {
+    public Set<StatisticResponse> getAllUsersStatistics() {
         return userRepository.findAll().stream()
                 .map(user -> new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage()))
                 .collect(Collectors.toSet());
