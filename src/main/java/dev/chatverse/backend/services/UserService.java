@@ -2,6 +2,7 @@ package dev.chatverse.backend.services;
 
 import dev.chatverse.backend.documents.User.Role;
 import dev.chatverse.backend.documents.User.User;
+import dev.chatverse.backend.dto.StatisticResponse;
 import dev.chatverse.backend.dto.UserResponse;
 import dev.chatverse.backend.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,15 @@ public class UserService {
 
     public User loadUserByEmail(String email) {
         log.debug("Loading user by email: {}", email);
-      
+
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with email: " + email)
+        );
+    }
+
+    public User loadUserByGivenAndFamilyName(String givenName, String familyName) {
+        return userRepository.findByGivenNameAndFamilyName(givenName, familyName).orElseThrow(
+                () -> new UsernameNotFoundException("User " + givenName + " " + familyName + " not found.")
         );
     }
 
@@ -78,5 +85,10 @@ public class UserService {
         roles.remove(Role.BANNED);
         userRepository.save(user);
         return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
+    }
+
+    public StatisticResponse getStatisticResponse(String email) {
+        User user = loadUserByEmail(email);
+        return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
     }
 }

@@ -3,10 +3,17 @@ package dev.chatverse.backend.documents.User;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Document
@@ -29,7 +36,7 @@ public class User {
 
     @Id
     @Nonnull
-    private String id;
+    private ObjectId id;
 
     @Nonnull
     private String givenName;
@@ -50,4 +57,18 @@ public class User {
 
     @Nonnull
     private Set<Role> roles = new HashSet<>();
+
+    @Nonnull
+    private Integer messageCount = 0;
+
+    @Nonnull
+    private Float toxicPercentage = 0.0f;
+
+    @Nonnull
+    private Boolean isBanned = false;
+
+    private String banDate;
+
+    private List<String> toxicMessages = new ArrayList<>();
+
 }
