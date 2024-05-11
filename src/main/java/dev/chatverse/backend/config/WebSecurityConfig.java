@@ -33,11 +33,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/login").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler((request, response, authentication) -> response.sendRedirect("http://localhost:8080/users/me"))
+                        .successHandler((request, response, authentication) -> response.sendRedirect("http://localhost:5173"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
@@ -49,8 +49,8 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cors = new CorsConfiguration();
         cors.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        cors.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5500", "http://localhost:8080"));
-        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
+        cors.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "http://localhost:8080"));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "DELETE"));
         cors.setAllowCredentials(true);
         cors.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

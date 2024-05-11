@@ -1,21 +1,16 @@
 package dev.chatverse.backend.documents;
 
-import lombok.Getter;
-import lombok.Setter;
+import dev.chatverse.backend.dto.UserResponse;
+import lombok.Builder;
+import lombok.Data;
 
-@Setter
-@Getter
+import java.util.Date;
+
+
+@Data
+@Builder
 public class Response {
-
-    private String senderEmail;
+    private UserResponse sender;
     private String message;
-
-    public Response() {
-    }
-
-    public Response(String name, String senderEmail) {
-        this.message = name;
-        this.senderEmail = senderEmail;
-    }
-
+    private Date timestamp;
 }

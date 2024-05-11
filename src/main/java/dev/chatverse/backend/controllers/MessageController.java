@@ -2,22 +2,24 @@ package dev.chatverse.backend.controllers;
 
 import dev.chatverse.backend.documents.Input;
 import dev.chatverse.backend.documents.Response;
+import dev.chatverse.backend.services.MessageService;
+import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 
 import java.security.Principal;
 
 @Controller
+@AllArgsConstructor
 public class MessageController {
+
+    private final MessageService messageService;
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public Response greeting(Input message) throws Exception {
-//        String email = principal.getName();
-        Thread.sleep(1000); // simulated delay
-        return new Response(HtmlUtils.htmlEscape(message.getMessage()), "bykowski@dev.pl");
+    public Response greeting(Principal principal, Input message) {
+        return messageService.handleReceivedMessage(principal.getName(), message.getMessage());
     }
 }
 
