@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfig {
 
     @Autowired
@@ -37,7 +39,7 @@ public class WebSecurityConfig {
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler((request, response, authentication) -> response.sendRedirect("http://localhost:8080/users/me"))
+                        .successHandler((request, response, authentication) -> response.sendRedirect("https://cv.bykowski.dev/login/success"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
@@ -49,8 +51,8 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cors = new CorsConfiguration();
         cors.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        cors.setAllowedOrigins(List.of("http://localhost:3000"));
-        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
+        cors.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "http://localhost:8080"));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "DELETE"));
         cors.setAllowCredentials(true);
         cors.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
