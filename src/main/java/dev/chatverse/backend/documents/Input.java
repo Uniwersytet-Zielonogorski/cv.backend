@@ -1,19 +1,8 @@
 package dev.chatverse.backend.documents;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
+@Data
 public class Input {
-
     private String message;
-
-    public Input() {
-    }
-
-    public Input(String name) {
-        this.message = name;
-    }
-
 }

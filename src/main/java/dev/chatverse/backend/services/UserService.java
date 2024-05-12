@@ -87,8 +87,24 @@ public class UserService {
         return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
     }
 
+    public UserResponse addToxicMessage(String email, String message) {
+        User user = loadUserByEmail(email);
+        user.getToxicMessages().add(message);
+        user.setToxicPercentage((float) user.getToxicMessages().size() / user.getMessageCount() * 100);
+        userRepository.save(user);
+        return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
+    }
+
+    public void incrementMessageCount(String email) {
+        User user = loadUserByEmail(email);
+        user.setMessageCount(user.getMessageCount() + 1);
+        userRepository.save(user);
+        new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
+    }
+
     public StatisticResponse getStatisticResponse(String email) {
         User user = loadUserByEmail(email);
         return new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage());
     }
+
 }

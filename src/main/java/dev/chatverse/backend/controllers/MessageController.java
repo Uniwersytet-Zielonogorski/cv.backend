@@ -17,7 +17,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
+    @SendTo("/topic/messages")
     public Response greeting(Principal principal, Input message) {
         return messageService.handleReceivedMessage(principal.getName(), message.getMessage());
     }
