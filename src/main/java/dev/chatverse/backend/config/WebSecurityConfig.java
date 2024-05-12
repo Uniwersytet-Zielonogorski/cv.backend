@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -36,10 +37,15 @@ public class WebSecurityConfig {
                         .cacheControl(Customizer.withDefaults())
                 )
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/login").permitAll()
                         .anyRequest().authenticated()
+                )
+                .sessionManagement(
+                        sessionManagement -> sessionManagement
+                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
