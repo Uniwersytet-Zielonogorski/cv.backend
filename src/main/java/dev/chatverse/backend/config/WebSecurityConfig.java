@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler((request, response, authentication) -> response.sendRedirect("http://localhost:5173"))
+                        .successHandler((request, response, authentication) -> response.sendRedirect("https://cv.bykowski.dev/login/success"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
