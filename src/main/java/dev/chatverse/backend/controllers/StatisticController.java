@@ -21,7 +21,6 @@ public class StatisticController {
     private UserService userService;
     private StatisticService StatisticService;
 
-
     @GetMapping("/me")
     public StatisticResponse statistic(Principal principal) {
         String currentPrincipalName = principal.getName();

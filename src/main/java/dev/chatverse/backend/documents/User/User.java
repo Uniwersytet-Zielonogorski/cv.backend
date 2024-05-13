@@ -2,12 +2,10 @@ package dev.chatverse.backend.documents.User;
 
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Email;
-import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -32,11 +30,16 @@ public class User {
         this.userName = user.getUserName();
         this.email = user.getEmail();
         this.roles = user.getRoles();
+        this.messageCount = user.getMessageCount();
+        this.toxicPercentage = user.getToxicPercentage();
+        this.isBanned = user.getIsBanned();
+        this.banDate = user.getBanDate();
+        this.toxicMessages = user.getToxicMessages();
     }
 
     @Id
     @Nonnull
-    private ObjectId id;
+    private String id;
 
     @Nonnull
     private String givenName;

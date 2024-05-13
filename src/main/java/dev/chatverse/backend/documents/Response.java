@@ -11,6 +11,10 @@ import java.util.Date;
 @Builder
 public class Response {
     private UserResponse sender;
+    private Toxicity toxicity;
     private String message;
     private Date timestamp;
+
+    public record Toxicity(boolean isToxic) {
+    }
 }

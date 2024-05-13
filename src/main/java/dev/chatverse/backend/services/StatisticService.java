@@ -35,7 +35,7 @@ public class StatisticService {
     public List<StatisticResponse> getLeaderboard() {
         return userRepository.findAll().stream()
                 .map(user -> new StatisticResponse(user.getId(), user.getMessageCount(), user.getToxicMessages(), user.getToxicPercentage()))
-                .sorted((o1, o2) -> (int) (o2.getToxicPercentage() - o1.getToxicPercentage()))
+                .sorted((o1, o2) -> (int) (o2.toxicPercentage() - o1.toxicPercentage()))
                 .limit(10)
                 .collect(Collectors.toList());
     }
