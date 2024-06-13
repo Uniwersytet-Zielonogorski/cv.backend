@@ -59,7 +59,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setUserName(Objects.requireNonNull(oauthUser.getAttribute("name")));
             user.setRoles(new HashSet<>(Set.of(Role.USER)));
             user.setGivenName(Objects.requireNonNull(oauthUser.getAttribute("given_name")));
-            user.setFamilyName(Objects.requireNonNull(oauthUser.getAttribute("family_name")));
+            user.setFamilyName(oauthUser.getAttribute("family_name"));
             user.setPicture(oauthUser.getAttribute("picture"));
             user.setLocale(oauthUser.getAttribute("locale"));
             log.debug("Saving user: {}", user);

@@ -43,7 +43,6 @@ public class User {
     @Nonnull
     private String givenName;
 
-    @Nonnull
     private String familyName;
 
     private String picture;
