@@ -154,7 +154,7 @@ public class UserService {
      * @throws UsernameNotFoundException if no banned users are found
      */
     public Set<UserResponse> getBannedUsers() {
-        return userRepository.findByRoles(Set.of(Role.BANNED)).orElseThrow(
+        return userRepository.findByRolesContaining(Role.BANNED).orElseThrow(
                         () -> new UsernameNotFoundException("No banned users found.")
                 ).stream()
                 .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles()))

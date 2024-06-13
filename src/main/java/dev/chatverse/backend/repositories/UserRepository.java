@@ -10,6 +10,6 @@ import java.util.Set;
 public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUserName(String userName);
-    Optional<Set<User>> findByRoles(Set<Role> roles);
+    Optional<Set<User>> findByRolesContaining(Role role);
     Optional<User> findByGivenNameAndFamilyName(String givenName, String familyName);
 }
