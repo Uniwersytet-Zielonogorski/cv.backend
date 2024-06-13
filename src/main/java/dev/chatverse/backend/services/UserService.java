@@ -87,6 +87,14 @@ public class UserService {
         return new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles());
     }
 
+    public Set<UserResponse> getBannedUsers() {
+        return userRepository.findByRoles(Set.of(Role.BANNED)).orElseThrow(
+                () -> new UsernameNotFoundException("No banned users found.")
+        ).stream()
+                .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getUserName(), user.getPicture(), user.getRoles()))
+                .collect(Collectors.toSet());
+    }
+
     public UserResponse addToxicMessage(String email, String message) {
         User user = loadUserByEmail(email);
         user.getToxicMessages().add(message);

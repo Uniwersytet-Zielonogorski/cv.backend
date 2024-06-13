@@ -32,18 +32,7 @@ public class UserServiceTest {
 
     @Test
     void testLoadUserByEmailSuccess() {
-        User user = User.builder()
-                .givenName("John")
-                .familyName("Doe")
-                .email("test@example.com")
-                .locale("en-US")
-                .picture("http://example.com/picture")
-                .roles(new HashSet<>())
-                .userName("john.doe")
-
-                        .build();
-
-
+        User user = User.builder().givenName("John").familyName("Doe").email("test@example.com").locale("en-US").picture("http://example.com/picture").roles(new HashSet<>()).userName("john.doe").build();
 
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
@@ -67,15 +56,7 @@ public class UserServiceTest {
 
     @Test
     void testGetUserResponse() {
-        User user = User.builder()
-                .givenName("John")
-                .familyName("Doe")
-                .email("test@example.com")
-                .locale("en-US")
-                .picture("http://example.com/picture")
-                .roles(new HashSet<>())
-                .userName("john.doe")
-                .build();
+        User user = User.builder().givenName("John").familyName("Doe").email("test@example.com").locale("en-US").picture("http://example.com/picture").roles(new HashSet<>()).userName("john.doe").build();
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         UserResponse userResponse = userService.getUserResponse("test@example.com");

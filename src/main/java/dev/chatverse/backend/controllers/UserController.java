@@ -58,6 +58,12 @@ public class UserController {
         return userService.getUserResponse(email);
     }
 
+    @PostMapping("/pay")
+    public UserResponse payForUnban(Principal principal) {
+        String currentPrincipalName = principal.getName();
+        return userService.unbanUser(currentPrincipalName);
+    }
+
     @RolesAllowed("ADMIN")
     @PutMapping("/{email}")
     public UserResponse updateUser(
@@ -92,5 +98,11 @@ public class UserController {
     @PostMapping("/{email}/unban")
     public UserResponse unbanUser(@PathVariable String email) {
         return userService.unbanUser(email);
+    }
+
+    @RolesAllowed("ADMIN")
+    @GetMapping("/bannedUsers")
+    public Set<UserResponse> getBannedUsers() {
+        return userService.getBannedUsers();
     }
 }

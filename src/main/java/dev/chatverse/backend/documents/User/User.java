@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +58,7 @@ public class User {
     private String email;
 
     @Nonnull
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     @Nonnull
     private Integer messageCount = 0;

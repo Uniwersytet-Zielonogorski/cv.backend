@@ -37,4 +37,5 @@ public class StatisticController {
     public List<StatisticResponse> getLeaderboard() {
         return StatisticService.getLeaderboard();
     }
+
 }
