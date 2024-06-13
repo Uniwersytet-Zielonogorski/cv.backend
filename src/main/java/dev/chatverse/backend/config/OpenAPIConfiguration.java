@@ -19,11 +19,12 @@ public class OpenAPIConfiguration {
         Contact myContact = new Contact();
         myContact.setName("University of Zielona Góra");
         myContact.setUrl("https://github.com/Uniwersytet-Zielonogorski");
+        myContact.setUrl("https://cv.bykowski.dev");
 
         Info information = new Info()
                 .title("ChatVerse API")
-                .version("0.0.0")
-                .description("This API exposes endpoints to manage Users")
+                .version("0.0.1")
+                .description("ChatVerse API Documentation")
                 .contact(myContact);
 
         return new OpenAPI().info(information).servers(List.of(server));

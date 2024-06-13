@@ -14,6 +14,13 @@ public class MessageService {
     private final UserService userService;
     private final PerspectiveService perspectiveService;
 
+    /**
+     * Handle a received message.
+     *
+     * @param senderEmail the email of the sender
+     * @param message     the message received
+     * @return the response to the received message
+     */
     public Response handleReceivedMessage(String senderEmail, String message) {
         UserResponse sender = userService.getUserResponse(senderEmail);
 

@@ -25,6 +25,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private UserRepository userRepository;
 
+    /**
+     * Load the user from the OAuth2 provider and process it.
+     *
+     * @param userRequest the user request
+     * @return the processed OAuth2 user
+     * @throws OAuth2AuthenticationException if the user is banned
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oauthUser = super.loadUser(userRequest);
@@ -33,6 +40,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return processOAuth2User(oauthUser);
     }
 
+    /**
+     * Process the OAuth2 user.
+     *
+     * @param oauthUser the OAuth2 user to process
+     * @return the processed OAuth2 user
+     * @throws OAuth2AuthenticationException if the user is banned
+     */
     private OAuth2User processOAuth2User(OAuth2User oauthUser) {
         String email = oauthUser.getAttribute("email");
         User user = userRepository.findByEmail(email).orElse(null);

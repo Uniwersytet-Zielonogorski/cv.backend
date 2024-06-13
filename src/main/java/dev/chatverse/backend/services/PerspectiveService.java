@@ -21,6 +21,12 @@ public class PerspectiveService {
     private String apiKey;
 
 
+    /**
+     * Analyze the given comment for toxicity and profanity.
+     *
+     * @param comment the comment to analyze
+     * @return the analysis response of the comment
+     */
     public Mono<AnalysisResponse> analyzeComment(String comment) {
         String requestBody = buildRequestBody(comment, List.of("TOXICITY", "PROFANITY"));
 
@@ -31,6 +37,13 @@ public class PerspectiveService {
                 .retrieve().bodyToMono(AnalysisResponse.class);
     }
 
+    /**
+     * Build the request body for the Perspective API.
+     *
+     * @param comment    the comment to analyze
+     * @param attributes the attributes to request
+     * @return the request body for the Perspective API
+     */
     private String buildRequestBody(String comment, List<String> attributes) {
         StringBuilder attributesJson = new StringBuilder();
         for (String attribute : attributes) {
