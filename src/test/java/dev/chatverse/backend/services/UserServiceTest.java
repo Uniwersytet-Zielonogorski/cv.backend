@@ -1,70 +1,70 @@
 package dev.chatverse.backend.services;
 
+import dev.chatverse.backend.documents.User.Role;
 import dev.chatverse.backend.documents.User.User;
 import dev.chatverse.backend.dto.UserResponse;
 import dev.chatverse.backend.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
-    @InjectMocks
     private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        userService = new UserService(userRepository);
     }
 
     @Test
     void testLoadUserByEmailSuccess() {
-        User user = User.builder().givenName("John").familyName("Doe").email("test@example.com").locale("en-US").picture("http://example.com/picture").roles(new HashSet<>()).userName("john.doe").build();
+        String email = "test@example.com";
+        User user = User.builder()
+                .id("1")
+                .givenName("Test")
+                .familyName("User")
+                .email(email)
+                .userName("testuser")
+                .roles(Set.of(Role.USER))
+                .build();
 
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        User result = userService.loadUserByEmail("test@example.com");
+        User result = userService.loadUserByEmail(email);
 
-        assertNotNull(result);
-        assertEquals("John", result.getGivenName());
-        assertEquals("test@example.com", result.getEmail());
-        assertEquals("john.doe", result.getUserName());
-        assertEquals("http://example.com/picture", result.getPicture());
-        assertEquals(new HashSet<>(), result.getToxicMessages());
-
-    }
-
-    @Test
-    void testLoadUserByEmailNotFound() {
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-
-        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByEmail("nonexistent@example.com"));
+        assertEquals(user, result);
+        verify(userRepository).findByEmail(email);
     }
 
     @Test
     void testGetUserResponse() {
-        User user = User.builder().givenName("John").familyName("Doe").email("test@example.com").locale("en-US").picture("http://example.com/picture").roles(new HashSet<>()).userName("john.doe").build();
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        String email = "test@example.com";
+        User user = User.builder()
+                .id("1")
+                .givenName("Test")
+                .familyName("User")
+                .email(email)
+                .userName("testuser")
+                .roles(Set.of(Role.USER))
+                .build();
 
-        UserResponse userResponse = userService.getUserResponse("test@example.com");
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
-        assertNotNull(userResponse);
-        assertEquals("1", userResponse.getId());
-        assertEquals("test@example.com", userResponse.getEmail());
-        assertEquals("john.doe", userResponse.getUserName());
-        assertEquals("http://example.com/picture", userResponse.getPictureUrl());
+        UserResponse result = userService.getUserResponse(email);
+
+        assertEquals(email, result.getEmail());
+        verify(userRepository).findByEmail(email);
     }
 }

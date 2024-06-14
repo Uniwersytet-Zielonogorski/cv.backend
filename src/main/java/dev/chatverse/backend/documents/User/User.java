@@ -60,16 +60,20 @@ public class User {
     private Set<Role> roles;
 
     @Nonnull
-    private Integer messageCount = 0;
+    @Builder.Default
+    Integer messageCount = 0;
 
     @Nonnull
+    @Builder.Default
     private Float toxicPercentage = 0.0f;
 
     @Nonnull
+    @Builder.Default
     private Boolean isBanned = false;
 
     private String banDate;
 
+    @Builder.Default
     private List<String> toxicMessages = new ArrayList<>();
 
 }

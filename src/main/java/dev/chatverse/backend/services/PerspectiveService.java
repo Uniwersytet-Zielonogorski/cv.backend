@@ -44,7 +44,7 @@ public class PerspectiveService {
      * @param attributes the attributes to request
      * @return the request body for the Perspective API
      */
-    private String buildRequestBody(String comment, List<String> attributes) {
+    public String buildRequestBody(String comment, List<String> attributes) {
         StringBuilder attributesJson = new StringBuilder();
         for (String attribute : attributes) {
             attributesJson.append(String.format("\"%s\": {},", attribute));

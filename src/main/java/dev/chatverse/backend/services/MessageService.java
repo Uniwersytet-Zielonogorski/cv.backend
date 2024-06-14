@@ -33,8 +33,6 @@ public class MessageService {
             sender = userService.addToxicMessage(senderEmail, message);
         }
 
-        System.out.println(userService.loadUserByEmail(senderEmail));
-
         return Response.builder()
                 .sender(sender)
                 .message(message)

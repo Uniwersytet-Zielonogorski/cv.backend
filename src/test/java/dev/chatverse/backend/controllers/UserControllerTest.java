@@ -1,73 +1,98 @@
-// package dev.chatverse.backend.controllers;
+package dev.chatverse.backend.controllers;
 
-// import dev.chatverse.backend.config.WebSecurityConfig;
-// import dev.chatverse.backend.services.CustomOAuth2UserService;
-// import dev.chatverse.backend.services.UserService;
-// import org.junit.jupiter.api.Test;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-// import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.context.annotation.Import;
-// import org.springframework.http.MediaType;
-// import org.springframework.test.web.servlet.MockMvc;
-// import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-// import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import dev.chatverse.backend.Forms.EditUserForm;
+import dev.chatverse.backend.dto.UserResponse;
+import dev.chatverse.backend.services.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.security.Principal;
+import java.util.Set;
 
-// @WebMvcTest(controllers = UserController.class)
-// @AutoConfigureMockMvc
-// @Import({WebSecurityConfig.class})
-// class UserControllerTest {
-//     @Autowired
-//     private MockMvc mockMvc;
-//     @MockBean
-//     private UserService userService;
-//     @MockBean
-//     private CustomOAuth2UserService customOAuth2UserService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-//     @Test
-//     void redirect() throws Exception {
-//         mockMvc.perform(MockMvcRequestBuilders
-//                         .get("/login")
-//                         .accept(MediaType.APPLICATION_JSON)
+public class UserControllerTest {
 
-//                 )
-//                 .andExpect(status().is2xxSuccessful())
-//                 .andDo(MockMvcResultHandlers.print());
-//     }
+    @Mock
+    private UserService userService;
 
-//     @Test
-//     void unAuth() throws Exception {
-//         mockMvc.perform(MockMvcRequestBuilders
-//                         .get("/v3/api-docs")
-//                         .accept(MediaType.APPLICATION_JSON)
+    private UserController userController;
 
-//                 )
-//                 .andExpect(status().is(200))
-//                 .andDo(MockMvcResultHandlers.print());
-//     }
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        userController = new UserController(userService);
+    }
 
-//     @Test
-//     void unAuth1() throws Exception {
-//         mockMvc.perform(MockMvcRequestBuilders
-//                         .get("/me")
-//                         .accept(MediaType.APPLICATION_JSON)
+    @Test
+    void testMe() {
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn("test@example.com");
 
-//                 )
-//                 .andExpect(status().is(401))
-//                 .andDo(MockMvcResultHandlers.print());
-//     }
+        UserResponse userResponse = new UserResponse("1", "test@example.com", "Test User", "test.jpg", Set.of());
+        when(userService.getUserResponse(principal.getName())).thenReturn(userResponse);
 
-//     @Test
-//     void main() throws Exception {
-//         mockMvc.perform(MockMvcRequestBuilders
-//                         .get("/")
-//                         .accept(MediaType.APPLICATION_JSON)
+        UserResponse result = userController.me(principal);
 
-//                 )
-//                 .andExpect(status().is(401))
-//                 .andDo(MockMvcResultHandlers.print());
-//     }
-// }
+        assertEquals(userResponse, result);
+        verify(userService).getUserResponse(principal.getName());
+    }
+
+    @Test
+    void testUpdateMe() {
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn("test@example.com");
+
+        EditUserForm editUserForm = new EditUserForm();
+        editUserForm.setGivenName("Updated Name");
+
+        UserResponse userResponse = new UserResponse("1", "test@example.com", "Updated User", "test.jpg", Set.of());
+        when(userService.updateUser(
+                eq(principal.getName()),
+                eq(editUserForm.getGivenName()),
+                eq(editUserForm.getFamilyName()),
+                eq(editUserForm.getUserName()),
+                eq(editUserForm.getPicture()),
+                any())).thenReturn(userResponse);
+
+        UserResponse result = userController.updateMe(editUserForm, principal);
+
+        assertEquals(userResponse, result);
+        verify(userService).updateUser(
+                eq(principal.getName()),
+                eq(editUserForm.getGivenName()),
+                eq(editUserForm.getFamilyName()),
+                eq(editUserForm.getUserName()),
+                eq(editUserForm.getPicture()),
+                any());
+    }
+
+    @Test
+    void testDeleteMe() {
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn("test@example.com");
+
+        doNothing().when(userService).deleteUser(anyString());
+
+        userController.deleteMe(principal);
+
+        verify(userService).deleteUser(principal.getName());
+    }
+
+    @Test
+    void testGetAllUsers() {
+        Set<UserResponse> users = Set.of(
+                new UserResponse("1", "test1@example.com", "Test User 1", "test1.jpg", Set.of()),
+                new UserResponse("2", "test2@example.com", "Test User 2", "test2.jpg", Set.of())
+        );
+        when(userService.getAllUsers()).thenReturn(users);
+
+        Set<UserResponse> result = userController.getAllUsers();
+
+        assertEquals(users, result);
+        verify(userService).getAllUsers();
+    }
+}
